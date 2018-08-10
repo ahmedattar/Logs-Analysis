@@ -1,5 +1,6 @@
+#!/usr/bin/env python3
+
 '''
-This program is written in python3
 It is required project( Log Analysis)
 for udacity full stack web developer nanodegree
 '''
@@ -18,8 +19,8 @@ def connect_to_database(data_base="newsdata"):
         sys.exit(0)
 
 
-''' here is the responsible function for committing 
-the queries of the project '''
+# here is the responsible function for fetching the queries of the project
+
 
 def fetch_query(query):
     connection, cursor = connect_to_database()
@@ -29,8 +30,8 @@ def fetch_query(query):
     return results
 
 
-''' here is the responsible function for printing 
-the 3 top popular articles'''
+# the responsible function for printing the 3 top popular articles
+
 
 def print_top_3_popular_articles():
     first_query = '''select articles.title, count(log.id) as toal_reads from
@@ -46,8 +47,8 @@ def print_top_3_popular_articles():
     print()
 
 
-''' here is the responsible function for 
-printing the most 4 popular authors '''
+# the responsible function for printing the most 4 popular authors:
+
 
 def print_top_4_popular_authors():
     second_query = '''select authors.name, count(log.id) as total
@@ -63,8 +64,9 @@ def print_top_4_popular_authors():
     print()
 
 
-''' here is the responsible function for printing the days with error 
-requests precentages more than 1% of requests '''
+# the responsible function for printing the days with
+# error requests precentages more than 1% of requests
+
 
 def print_days_of_error_requests():
     third_query = '''select
@@ -73,8 +75,11 @@ def print_days_of_error_requests():
                     ,'9.99')
                     || '%' as error_percentage
         from
-            (select date(time),count(*) from log group by date(time)) as requests_per_day,
-            (select date(time),count(*) from log where status != '200 OK' group by date(time)) as errors_per_day
+            (select date(time),count(*) from log group by date(time))
+            as requests_per_day,
+            (select date(time),count(*) from log where status != '200 OK'
+            group by date(time))
+            as errors_per_day
         where
             requests_per_day.date = errors_per_day.date
             and ((errors_per_day.count::decimal
